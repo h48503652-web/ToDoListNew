@@ -2,9 +2,9 @@ import axios from "axios";
 
 // ✅ יצירת axios instance עם Base URL
 const api = axios.create({
-  baseURL: "http://localhost:5091", // לשנות אם ה-API רץ על פורט אחר
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:5091",
+  // עכשיו זה יקח אוטומטית את הכתובת מה-.env כשאת ב-production
 });
-
 // ✅ Interceptor לתפיסת שגיאות
 api.interceptors.response.use(
   (response) => response,
