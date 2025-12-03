@@ -1,0 +1,47 @@
+# -------------------------
+# Visual Studio / C# files
+# -------------------------
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.cache
+*.pdb
+*.tmp
+*.vs/
+*.exe
+*.dll
+*.log
+*.db
+*.mdf
+*.ldf
+
+# -------------------------
+# Rider / ReSharper
+# -------------------------
+_ReSharper*/
+*.resharper
+*.sln.ide
+
+# -------------------------
+# VSCode settings
+# -------------------------
+.vscode/
+
+# -------------------------
+# Node / React files
+# -------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# -------------------------
+# Build / dist folders
+# -------------------------
+dist/
+build/
