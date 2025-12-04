@@ -4,44 +4,44 @@ using TodoApi;
 // ------------------------
 // Minimal API Program.cs
 // ------------------------
-
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ הוספת כל השירותים לפני Build()
+// ✅ הוספת כל השירותים
 builder.Services.AddDbContext<ToDoDbContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// CORS – כבר יש לך! (אפשר להשאיר AllowAnyOrigin או לשנות ליותר ספציפי)
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
         policy.AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowAnyOrigin();
+              .AllowAnyOrigin();   // עובד מצוין גם ככה
+                                   // אם בא לך יותר בטוח: .WithOrigins("https://todolist-react-bgc4.onrender.com")
     });
 });
 
-// ✅ עכשיו אפשר לבנות את האפליקציה
 var app = builder.Build();
 
 // ✅ Middleware
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseCors();
+app.UseCors();   // ← חשוב! זה מפעיל את ה-CORS
 
-// ✅ ROUTES
-app.MapGet("/tasks", async (ToDoDbContext db) =>
-    await db.Items.ToListAsync()
-);
+// ✅ ROUTES – שיניתי רק את ה-path מ-/tasks ל-/api/todoitems
+app.MapGet("/api/todoitems", async (ToDoDbContext db) =>
+    await db.Items.ToListAsync());
 
-app.MapPost("/tasks", async (Item item, ToDoDbContext db) =>
+app.MapPost("/api/todoitems", async (Item item, ToDoDbContext db) =>
 {
     db.Items.Add(item);
     await db.SaveChangesAsync();
-    return Results.Created($"/tasks/{item.Id}", item);
+    return Results.Created($"/api/todoitems/{item.Id}", item);
 });
 
-app.MapPut("/tasks/{id}", async (int id, Item updatedItem, ToDoDbContext db) =>
+app.MapPut("/api/todoitems/{id}", async (int id, Item updatedItem, ToDoDbContext db) =>
 {
     var item = await db.Items.FindAsync(id);
     if (item == null) return Results.NotFound();
@@ -52,7 +52,7 @@ app.MapPut("/tasks/{id}", async (int id, Item updatedItem, ToDoDbContext db) =>
     return Results.Ok(item);
 });
 
-app.MapDelete("/tasks/{id}", async (int id, ToDoDbContext db) =>
+app.MapDelete("/api/todoitems/{id}", async (int id, ToDoDbContext db) =>
 {
     var item = await db.Items.FindAsync(id);
     if (item == null) return Results.NotFound();
